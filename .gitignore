@@ -26,9 +26,10 @@ yarn-error.log*
 
 # Frontend specific
 client/node_modules/
-frontend/build/
-frontend/.env
+client/build/
+client/.env
 
 # Backend specific
 server/node_modules/
-backend/.env
+server/.env
+server/config/default.json
