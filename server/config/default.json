@@ -1,5 +1,0 @@
-{
-    "mongoURI": "mongodb://localhost:27017/contactDatabase",
-    "port": 4000
-}
-  

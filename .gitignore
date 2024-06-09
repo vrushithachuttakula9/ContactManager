@@ -32,4 +32,4 @@ client/.env
 # Backend specific
 server/node_modules/
 server/.env
-config/default.json
+server/config/default.json
