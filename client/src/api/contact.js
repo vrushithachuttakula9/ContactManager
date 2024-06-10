@@ -9,7 +9,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: "https://contactmanager-idab.onrender.com",
+    baseURL: "https://contactmanager-b73e.onrender.com",
 });
 
 api.interceptors.request.use((config) => {
