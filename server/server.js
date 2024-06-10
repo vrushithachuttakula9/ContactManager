@@ -10,11 +10,11 @@ const app = express();
 // Connect Database
 connectDB();
 
-// app.use(cors());  
+app.use(cors());  
 
-app.use(cors({
-  origin: 'https://6666e356660c8229092ba451--yourcontactapp.netlify.app' // Allow requests from 'http://example.com// Respond with a 204 status code for preflight requests
-}));
+// app.use(cors({
+//   origin: 'https://6666e356660c8229092ba451--yourcontactapp.netlify.app' // Allow requests from 'http://example.com// Respond with a 204 status code for preflight requests
+// }));
 
 // Init Middleware
 app.use(express.json());
