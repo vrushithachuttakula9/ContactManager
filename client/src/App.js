@@ -16,7 +16,6 @@ import PrivateRoute from './components/privateRoutes.js';
 import PublicRoute from './components/publicRoutes.js';
   
 function App() {
-    const LOCAL_STORAGE_KEY = "contacts";
     const [contacts, setContacts] = useState([]);
   
     const { token } = useAuth();
