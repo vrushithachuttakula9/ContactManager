@@ -82,3 +82,23 @@ exports.login = async (req, res) => {
         res.status(500).send("Server Error");
     }
 };
+
+exports.getUserProfile = async (req, res) => {
+    try {
+        // Extract user ID from JWT token
+        const userId = req.user.id;
+
+        // Fetch user profile from the database
+        const user = await User.findById(userId).select('-password'); // Exclude the password from the response
+
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+
+        res.json(user);
+    } catch (err) {
+        console.log(err)
+        console.error('Server Error:', err);
+        res.status(500).send('Server Error');
+    }
+};

@@ -18,7 +18,12 @@ const Register = () => {
         try {
             await register(username, password);
         } catch (error) {
-            console.error('Register failed:', error);
+            if (error.response && error.response.status === 409) {
+                setMessage('User already exists');
+              } else {
+                setMessage('Register failed');
+              }
+            // console.error('Register failed:', error);
         }
     };
 
