@@ -1,11 +1,12 @@
-//src/components/contactCard.js
-import React, { useState } from 'react';
+//src/components/contacdCard.js
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaTrashAlt, FaEdit, FaEllipsisV } from 'react-icons/fa';
 
 const ContactCard = (props) => {
     const { _id, name, email } = props.contact;
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const menu = useRef(null);
 
     const colors = [
         'bg-red-500', 'bg-blue-500', 'bg-green-500', 
@@ -29,37 +30,55 @@ const ContactCard = (props) => {
         return colors[index];
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menu.current && !menu.current.contains(event.target)) {
+                setDropdownOpen(false);
+            }
+        };
+
+        if (dropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [dropdownOpen]);
+
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
 
     return (
-        <div className="bg-white shadow-md rounded-lg p-4 mb-4 flex items-center justify-between">
-            <Link to={`/contact/${_id}`} state={{ contact: props.contact }} className="block mb-2 flex items-center flex-grow">
+        <div className="bg-white shadow-md rounded-lg p-4 mb-5 flex items-center justify-between max-w-full min-w-[20rem]">
+            <Link to={`/contact/${_id}`} state={{ contact: props.contact }} className="block mb-1 flex items-center flex-grow">
                 <div className="flex items-center">
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white mr-4 ${getColor(_id)}`}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white mr-4 ${getColor(_id)}`}>
                         <span className="text-lg font-semibold">{name.charAt(0)}</span>
                     </div>
                     <div>
-                        <div className="text-lg font-semibold">{name}</div>
-                        <div className="text-sm text-gray-500">{email}</div>
+                        <div className="text-md font-semibold">{name}</div>
+                        <div className="text-xs text-gray-500">{email}</div>
                     </div>
                 </div>
             </Link>
             <div className="flex items-center">
                 {/* Icons for larger screens */}
                 <div className="hidden sm:flex items-center">
-                    <button onClick={() => props.clickHandler(_id)} className="px-2 py-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2">
+                    <button onClick={() => props.clickHandler(_id)} className="px-1 py-1 bg-red-500 text-white rounded hover:bg-red-600 mr-2">
                         <FaTrashAlt />
                     </button>
                     <Link to={`/edit`} state={{ contact: props.contact }}>
-                        <button className="px-2 py-2 bg-teal-600 text-white rounded hover:bg-teal-700">
+                        <button className="px-1 py-1 bg-teal-600 text-white rounded hover:bg-teal-700">
                             <FaEdit />
                         </button>
                     </Link>
                 </div>
                 {/* Menu icon for small screens */}
-                <div className="sm:hidden relative">
+                <div ref={menu} className="sm:hidden relative">
                     <button onClick={toggleDropdown} className="p-2">
                         <FaEllipsisV />
                     </button>

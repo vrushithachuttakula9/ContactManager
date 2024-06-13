@@ -29,9 +29,9 @@ const Register = () => {
 
     return (
         <div className="flex items-center justify-center">
-            <div className="p-8 rounded-lg shadow-lg w-full max-w-md">
-                <h2 className="text-2xl text-teal-600 font-bold mb-6 text-center">Sign Up</h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="p-6 rounded-lg shadow-lg w-full max-w-sm">
+                <h2 className="text-lg text-teal-600 font-bold mb-3 text-center">Sign Up</h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="username" className="block text-sm font-medium text-gray-700">
                             Username
@@ -43,7 +43,7 @@ const Register = () => {
                             onChange={(e) => setUsername(e.target.value)}
                             placeholder="Username"
                             required
-                            className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                            className="text-sm mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
                         />
                     </div>
                     <div>
@@ -57,20 +57,20 @@ const Register = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Password"
                             required
-                            className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                            className="text-sm mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
                         />
                         {message && <p className="mt-4 text-sm text-red-600">{message}</p>}
                     </div>
                     <div className='text-center'>
                         <button
                             type="submit"
-                            className="w-1/4 bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 focus:outline-none"
+                            className="text-sm w-1/8 bg-teal-600 text-white py-1 px-2 rounded-md hover:bg-teal-700 focus:outline-none"
                         >
                             Sign Up
                         </button>
                     </div>
                 </form>
-                <p className="mt-4 text-sm text-center text-gray-600">
+                <p className="mt-4 text-xs text-center text-gray-600">
                     Already have an account? <Link to="/login" className="text-teal-600 hover:underline">Login</Link>
                 </p>
             </div>

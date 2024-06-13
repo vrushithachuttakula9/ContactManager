@@ -7,6 +7,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,11 +18,21 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+    } else {
+        localStorage.removeItem('user');
+    }
+  }, [user]); 
+
   const register = async (username, password) => {
     try {
       const response = await api.post('/user/register', { username, password });
       setToken(response.data.token);
+      setUser({ username });
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify({ username }));
       navigate('/');
     } catch (error) {
       console.error('Register Error:', error);
@@ -33,7 +44,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post('/user/login', { username, password });
       setToken(response.data.token);
+      setUser({ username });
       localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify({ username }));
       navigate('/');
     } catch (error) {
       console.error('Login Error:', error);
@@ -43,13 +56,16 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setToken('');
+    setUser(null)
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     console.log('Token after logout:', localStorage.getItem('token'));
     navigate('/login');
   };
 
   const value = {
     token,
+    user,
     login,
     register,
     logout,

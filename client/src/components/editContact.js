@@ -31,11 +31,11 @@ const EditContact = ({ updateContactHandler }) => {
   }, [contactToEdit]);
 
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-medium mb-4 text-teal-600">Edit Contact</h2>
-      <form onSubmit={update} className="space-y-4">
-        <div>
-          <label className="block mb-1">Name</label>
+    <div className="max-w-xs mx-auto mt-10 p-5 bg-white rounded-lg shadow-md">
+      <h2 className="text-xl font-medium mb-5 text-teal-600">Edit Contact</h2>
+      <form onSubmit={update} className="space-y-1">
+        <div className='mb-4'>
+          <label className="block mb-1 text-sm">Name</label>
           <input
             type="text"
             name="name"
@@ -43,11 +43,11 @@ const EditContact = ({ updateContactHandler }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-teal-400"
+            className="text-sm w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-teal-400"
           />
         </div>
         <div>
-          <label className="block mb-1">Email</label>
+          <label className="block mb-1 text-sm">Email</label>
           <input
             type="text"
             name="email"
@@ -55,13 +55,13 @@ const EditContact = ({ updateContactHandler }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-teal-400"
+            className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-teal-400"
           />
         </div>
         <div className='text-center'>
         <button
           type="submit"
-          className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700"
+          className="mt-5 px-1 py-1 text-base bg-teal-600 text-white rounded-md hover:bg-teal-700"
         >
           Update
         </button>
