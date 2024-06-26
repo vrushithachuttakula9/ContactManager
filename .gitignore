@@ -33,4 +33,5 @@ client/.env
 server/node_modules/
 server/.env
 server/config/default.json
-server/uploads
+server/uploads/*
+!/server/uploads/.gitkeep
