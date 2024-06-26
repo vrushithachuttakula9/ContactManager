@@ -10,6 +10,9 @@ module.exports = {
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
       },
+      fontSize: {
+        'xxs': '0.60rem',
+      },
 
       colors : {
         'teal-400' : 'rgb(45 212 191)',

@@ -1,3 +1,4 @@
+//src/models/contact.js
 const mongoose = require('mongoose');
 
 const ContactSchema = new mongoose.Schema({
@@ -13,6 +14,10 @@ const ContactSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+    },
+    image: { 
+        type: String,
+        required: false, 
     },
 });
 

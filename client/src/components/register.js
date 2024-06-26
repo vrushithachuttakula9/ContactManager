@@ -23,7 +23,6 @@ const Register = () => {
               } else {
                 setMessage('Register failed');
               }
-            // console.error('Register failed:', error);
         }
     };
 

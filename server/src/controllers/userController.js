@@ -1,6 +1,7 @@
+//src/controllers/userController.js
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user.js');
+const User = require('../models/userModel.js');
 const { validationResult } = require('express-validator');
 
 require('dotenv').config();
@@ -14,14 +15,8 @@ exports.register = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        // Debugging: Log request body
-        console.log('Register Request:', req.body);
-
         // Check if user already exists
         let user = await User.findOne({ username });
-
-        // Debugging: Log user found or not
-        console.log('User found:', user);
 
         if (user) {
             console.log("User already exists");
@@ -38,10 +33,12 @@ exports.register = async (req, res) => {
 
         // Save user to database
         await user.save();
+        user.password="";
+        console.log({ message: 'User registered successfully', user });
 
         // Generate JWT token
         const payload = { user: { id: user.id } };
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1y' }, (err, token) => {
+        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '365d' }, (err, token) => {
             if (err) throw err;
             res.json({ token });
         });
@@ -70,15 +67,16 @@ exports.login = async (req, res) => {
         if (!isMatch) {
             return res.status(401).json({ msg: "Invalid Credentials"});
         }
-        
+        user.password = "";
         const payload = { user: {id: user.id} };
         jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: 3600 }, (err, token) => {
             if (err) throw err;
             res.json({token});
         });
+
+        console.log({ message: 'User logged in successfully', user });
     } catch (err) {
         console.error('Server Error:', err);
-        // res.status(500).json({error: 'an error occurred'});
         res.status(500).send("Server Error");
     }
 };

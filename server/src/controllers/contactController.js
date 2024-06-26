@@ -1,4 +1,4 @@
-const Contact = require('../models/contact.js');
+const Contact = require('../models/contactModel.js');
 
 exports.getContacts = async (req, res) => {
     try {
@@ -10,47 +10,52 @@ exports.getContacts = async (req, res) => {
 };
 
 exports.addContact = async (req, res) => {
-    const { name, email, image} = req.body;
+  const { name, email } = req.body;
+  const image = req.file ? req.file.filename : null;
 
-    try {
-        let contact = new Contact({
-          user: req.user.id,
-          name,
-          email,
-          image
-        });
-    
-        contact = await contact.save();
-        res.json(contact);
-      } catch (err) {
-        console.log(err)
-        res.status(500).send('Server Error');
-      }
+  try {
+    let contact = new Contact({
+      user: req.user.id,
+      name,
+      email,
+      image
+    });
+
+    contact = await contact.save();
+    res.json(contact);
+  } catch (err) {
+    console.log(err)
+    res.status(500).send('Server Error');
+  }
 };
 
 exports.updateContact = async (req, res) => {
   const { name, email } = req.body;
+  const image = req.file ? req.file.filename : null;
 
   try {
-      let contact = await Contact.findById(req.params.id);
-  
-      if (!contact) return res.status(404).json({ msg: 'Contact not found' });
+    let contact = await Contact.findById(req.params.id);
 
-      if (contact.user.toString() !== req.user.id) {
-        return res.status(401).json({ msg: 'Not authorized' });
-      }
+    if (!contact) return res.status(404).json({ msg: 'Contact not found' });
 
-      contact.name = name || contact.name;
-      contact.email = email || contact.email;
-      // contact.image = image || contact.image;
-  
-      contact = await contact.save();
-      res.json(contact);
+    if (contact.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: 'Not authorized' });
+    }
+
+    contact.name = name || contact.name;
+    contact.email = email || contact.email;
+    if (image) {
+      contact.image = image;
+    }
+
+    contact = await contact.save();
+    res.json(contact);
   } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
 };
+
 
 exports.deleteContact = async (req, res) => {
     try {

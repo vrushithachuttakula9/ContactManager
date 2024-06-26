@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { FaTrashAlt, FaEdit, FaEllipsisV } from 'react-icons/fa';
 
 const ContactCard = (props) => {
-    const { _id, name, email } = props.contact;
+    const { _id, name, email, image } = props.contact;
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const menu = useRef(null);
 
@@ -53,15 +53,20 @@ const ContactCard = (props) => {
     };
 
     return (
-        <div className="bg-white shadow-md rounded-lg p-4 mb-5 flex items-center justify-between max-w-full min-w-[20rem]">
+        <div className="bg-white shadow-md rounded-lg p-4 mb-5 flex items-center justify-between max-w-full min-w-[16rem]">
             <Link to={`/contact/${_id}`} state={{ contact: props.contact }} className="block mb-1 flex items-center flex-grow">
                 <div className="flex items-center">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white mr-4 ${getColor(_id)}`}>
-                        <span className="text-lg font-semibold">{name.charAt(0)}</span>
+                {image ? (
+                        <img src={`http://localhost:4000/uploads/${image}`} alt={name} className="sm:w-10 sm:h-10 w-8 h-8 rounded-full object-cover mr-3" />
+                    ) : (
+                    <div className={`sm:w-10 sm:h-10 w-8 h-8 rounded-full flex items-center justify-center text-white mr-3 ${getColor(_id)}`}>
+                        <span className="text-sm sm:text-lg font-semibold">{name.charAt(0)}</span>
                     </div>
+                    )
+                }
                     <div>
-                        <div className="text-md font-semibold">{name}</div>
-                        <div className="text-xs text-gray-500">{email}</div>
+                        <div className="sm:text-base text-xxs font-semibold">{name}</div>
+                        <div className="sm:text-sm text-xxs text-gray-500">{email}</div>
                     </div>
                 </div>
             </Link>

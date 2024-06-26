@@ -26,6 +26,25 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user]); 
 
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await api.get('/user/profile', {
+          headers: {
+            'x-auth-token': token,
+          },
+        });
+        setUser(response.data);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+
+    if (token && !user) {
+      fetchUserProfile();
+    }
+  }, [token, user]);
+
   const register = async (username, password) => {
     try {
       const response = await api.post('/user/register', { username, password });
@@ -59,7 +78,6 @@ export const AuthProvider = ({ children }) => {
     setUser(null)
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    console.log('Token after logout:', localStorage.getItem('token'));
     navigate('/login');
   };
 

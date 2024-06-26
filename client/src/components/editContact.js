@@ -1,27 +1,15 @@
 //src/components/editContact.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const EditContact = ({ updateContactHandler }) => {
   const location = useLocation();
-  const contactToEdit = location.state?.contact || {};
+  const contactToEdit = useMemo(() => location.state?.contact || {},[location.state]);
 
   const [name, setName] = useState(contactToEdit.name || "");
   const [email, setEmail] = useState(contactToEdit.email || "");
+  const [newImage, setNewImage] = useState(null);
   const navigate = useNavigate();
-
-  const update = (e) => {
-    e.preventDefault();
-    if (name === "" || email === "") {
-      alert("All the fields are mandatory!");
-      return;
-    }
-    updateContactHandler({ id: contactToEdit._id, name, email });
-
-    setName(""); 
-    setEmail("");
-    navigate('/');
-  };
 
   useEffect(() => {
     if (contactToEdit) {
@@ -30,12 +18,32 @@ const EditContact = ({ updateContactHandler }) => {
     }
   }, [contactToEdit]);
 
+  const handleImageChange = (e) => {
+    setNewImage(e.target.files[0]);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    if (newImage) {
+      formData.append('image', newImage);
+    }
+
+    await updateContactHandler(formData, contactToEdit._id);
+
+    setName("");
+    setEmail("");
+    navigate('/');
+  };
+
   return (
-    <div className="max-w-xs mx-auto mt-10 p-5 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-medium mb-5 text-teal-600">Edit Contact</h2>
-      <form onSubmit={update} className="space-y-1">
-        <div className='mb-4'>
-          <label className="block mb-1 text-sm">Name</label>
+    <div className="max-w-xs mx-auto mt-4 p-5 bg-white rounded-lg shadow-md">
+      <h2 className="text-center text-xl font-medium mb-5 text-teal-600">Edit Contact</h2>
+      <form onSubmit={handleUpdate} className="space-y-1" encType="multipart/form-data">
+        <div>
+          <label className="text-gray-500 block mb-1 text-sm">Name</label>
           <input
             type="text"
             name="name"
@@ -47,7 +55,7 @@ const EditContact = ({ updateContactHandler }) => {
           />
         </div>
         <div>
-          <label className="block mb-1 text-sm">Email</label>
+          <label className="text-gray-500 block mb-1 text-sm">Email</label>
           <input
             type="text"
             name="email"
@@ -58,13 +66,23 @@ const EditContact = ({ updateContactHandler }) => {
             className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-teal-400"
           />
         </div>
+        <div className='mb-2'>
+          <label className="text-gray-500 block mb-1 text-sm">Upload New Image</label>
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-full px-2 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:border-teal-400"
+          />
+        </div>
         <div className='text-center'>
-        <button
-          type="submit"
-          className="mt-5 px-1 py-1 text-base bg-teal-600 text-white rounded-md hover:bg-teal-700"
-        >
-          Update
-        </button>
+          <button
+            type="submit"
+            className="mt-5 px-1 py-1 text-base bg-teal-600 text-white rounded-md hover:bg-teal-700"
+          >
+            Update
+          </button>
         </div>
       </form>
     </div>

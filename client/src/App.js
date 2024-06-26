@@ -2,7 +2,6 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { v4 as uuid4 } from "uuid";
 import api from "./api/contact.js";
 import Login from './components/login.js';
 import Register from './components/register.js';
@@ -32,38 +31,48 @@ function App() {
         return [];
       }
     };
-  
-    const addContactHandler = async (contact) => {
-      const request = {
-        id: uuid4(),
-        ...contact
+
+    const addContactHandler = async (formData) => {
+      try {
+        const response = await api.post("/contacts/add", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'x-auth-token': token,
+          }
+        });
+        setContacts([...contacts, response.data]);
+      } catch (error) {
+        console.error("There was an error adding the contact!", error);
       }
-      // const response = await api.post("/contacts/add", request, {
-      //   headers: { 'x-auth-token': {token} }      });
-      const response = await api.post("/contacts/add", request)
-      setContacts([...contacts, response.data]);
     };
-  
-    const updateContactHandler = async (contact) => {
-      const response = await api.put(`/contacts/${contact.id}`, contact, {
-        headers: { 'x-auth-token': {token} }      });
-      // const response = await api.put(`/contacts/${contact.id}`, contact);
-      const updatedContact = response.data;
-      setContacts(
-        contacts.map(contact => {
-          return contact._id === updatedContact._id ? updatedContact : contact;
-        })
-      );
+
+    const updateContactHandler = async (formData, contactId) => {
+      try {
+        const response = await api.put(`/contacts/${contactId}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'x-auth-token': token,
+          }
+        });
+        const updatedContact = response.data;
+        setContacts(
+          contacts.map(contact => {
+            return contact._id === updatedContact._id ? updatedContact : contact;
+          })
+        );
+      } catch (error) {
+        console.error("There was an error updating the contact!", error);
+      }
     };
-  
+    
     const removeContactHandler = async (id) => {
       const userConfirm = window.confirm("Are you sure, you want to delete this item");
       if (userConfirm) {
         try {
-          // await api.delete(`/contacts/${id}`, {
-          //   headers: { 'x-auth-token': {token} }
-          // });
-          await api.delete(`/contacts/${id}`);
+          await api.delete(`/contacts/${id}`, {
+            headers: { 'x-auth-token': {token} }
+          });
+          // await api.delete(`/contacts/${id}`);
           const newContactList = contacts.filter(contact => contact._id !== id);
           setContacts(newContactList);
         } catch (error) {
@@ -84,13 +93,14 @@ function App() {
   
     return (
       <div className="mx-8 pt-24">
+        {token && <Header />}
         <Routes>
           <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
-          <Route path="/add" element={<PrivateRoute><Header /><AddContact addContactHandler={addContactHandler} /></PrivateRoute>} />
-          <Route path="/edit" element={<PrivateRoute><Header /><EditContact updateContactHandler={updateContactHandler} /></PrivateRoute>} />
-          <Route path="/" element={<PrivateRoute><Header /><ContactList contacts={contacts} getContactId={removeContactHandler} /></PrivateRoute>} />
-          <Route path="/contact/:id" element={<PrivateRoute><Header /><ContactDetail /></PrivateRoute>} />
+          <Route path="/add" element={<PrivateRoute><AddContact addContactHandler={addContactHandler} /></PrivateRoute>} />
+          <Route path="/edit" element={<PrivateRoute><EditContact updateContactHandler={updateContactHandler} /></PrivateRoute>} />
+          <Route path="/" element={<PrivateRoute><ContactList contacts={contacts} getContactId={removeContactHandler} /></PrivateRoute>} />
+          <Route path="/contact/:id" element={<PrivateRoute><ContactDetail /></PrivateRoute>} />
         </Routes>
       </div>
     );

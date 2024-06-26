@@ -5,22 +5,28 @@ import { useNavigate } from 'react-router-dom';
 const AddContact = ({ addContactHandler }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  // const [image, setImage] = useState(null);
+  const [image, setImage] = useState(null);
   const navigate = useNavigate();
 
-  const add = (e) => {
+  const add = async (e) => {
     e.preventDefault();
-    addContactHandler({ name, email });
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('image', image);
+
+    await addContactHandler(formData);
     setName('');
     setEmail('');
+    setImage(null);
     navigate('/');
   };
 
   return (
-    <div className="max-w-xs mx-auto mt-10 p-5 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-medium mb-5 text-teal-600">Add Contact</h2>
-      <form onSubmit={add} className="space-y-1">
-      <div className='mb-4'>
+    <div className="max-w-xs mx-auto mt-5 p-5 bg-white rounded-lg shadow-md">
+      <h2 className="text-center text-xl font-medium mb-5 text-teal-600">Add Contact</h2>
+      <form onSubmit={add} className="space-y-1" encType="multipart/form-data">
+        <div>
           <label className="block mb-1 text-sm">Name</label>
           <input
             type="text"
@@ -42,6 +48,16 @@ const AddContact = ({ addContactHandler }) => {
             onChange={(e) => setEmail(e.target.value)}
             required
             className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-teal-400"
+          />
+        </div>
+        <div>
+          <label className="block mb-1 text-sm">Image</label>
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
+            className="text-xs w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-teal-400"
           />
         </div>
         <div className='text-center'>
