@@ -31,7 +31,7 @@ const ContactDetail = () => {
     return (
         <div className="mt-8 flex flex-col items-center justify-center h-full px-4 py-6 sm:px-6 lg:px-8">
             <div className="bg-white shadow-md rounded-lg p-8 mb-4 w-full max-w-xs min-w-[16rem] flex flex-col items-center">
-                <div className={`w-10 h-10 sm:w-16 sm:h-16 rounded-full ${getColor(contact._id)} flex items-center justify-center mb-4`}>
+                <div className={`w-10 h-10 sm:w-16 sm:h-16 rounded-full text-white ${getColor(contact._id)} flex items-center justify-center mb-4`}>
                     {contact.image ? (
                         <img
                             src={`http://localhost:4000/uploads/${contact.image}`}
