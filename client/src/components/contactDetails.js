@@ -33,8 +33,10 @@ const ContactDetail = () => {
             <div className="bg-white shadow-md rounded-lg p-8 mb-4 w-full max-w-xs min-w-[16rem] flex flex-col items-center">
                 <div className={`w-10 h-10 sm:w-16 sm:h-16 rounded-full text-white ${getColor(contact._id)} flex items-center justify-center mb-4`}>
                     {contact.image ? (
+                        
                         <img
-                            src={`http://localhost:4000/uploads/${contact.image}`}
+                            src={`${process.env.REACT_APP_API_BASE_URL}/uploads/${contact.image}`}
+                            // src={`http://localhost:4000/uploads/${contact.image}`}
                             alt={contact.name}
                             className="w-full h-full rounded-full object-cover"
                             style={{ maxWidth: '100%', maxHeight: '100%' }}

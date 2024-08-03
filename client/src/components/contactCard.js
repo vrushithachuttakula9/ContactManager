@@ -57,7 +57,8 @@ const ContactCard = (props) => {
             <Link to={`/contact/${_id}`} state={{ contact: props.contact }} className="block mb-1 flex items-center flex-grow">
                 <div className="flex items-center">
                 {image ? (
-                        <img src={`http://localhost:4000/uploads/${image}`} alt={name} className="sm:w-10 sm:h-10 w-8 h-8 rounded-full object-cover mr-3" />
+                        // <img src={`http://localhost:4000/uploads/${image}`} alt={name} className="sm:w-10 sm:h-10 w-8 h-8 rounded-full object-cover mr-3" />
+                        <img src={`${process.env.REACT_APP_API_BASE_URL}/uploads/${image}`} alt={name} className="sm:w-10 sm:h-10 w-8 h-8 rounded-full object-cover mr-3" />
                     ) : (
                     <div className={`sm:w-10 sm:h-10 w-8 h-8 rounded-full flex items-center justify-center text-white mr-3 ${getColor(_id)}`}>
                         <span className="text-sm sm:text-lg font-semibold">{name.charAt(0)}</span>
