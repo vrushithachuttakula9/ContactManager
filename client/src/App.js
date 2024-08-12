@@ -21,9 +21,6 @@ function App() {
   
     const retrieveContacts = async () => {
       try {
-        // const response = await api.get('/contacts/', {
-        //   headers: { 'x-auth-token': {token} }
-        // });
         const response = await api.get('/contacts/');
         return response.data;
       } catch (error) {
@@ -72,7 +69,6 @@ function App() {
           await api.delete(`/contacts/${id}`, {
             headers: { 'x-auth-token': {token} }
           });
-          // await api.delete(`/contacts/${id}`);
           const newContactList = contacts.filter(contact => contact._id !== id);
           setContacts(newContactList);
         } catch (error) {

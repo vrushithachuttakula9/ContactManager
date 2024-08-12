@@ -25,14 +25,11 @@ if (!fs.existsSync(uploads)) {
   console.log('Uploads directory already exists.');
 }
 
-
-// Define Routes
-// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads', express.static(uploads));
 app.use('/contacts', require('./src/routes/contactRoutes'));
 app.use('/user', require('./src/routes/userRoutes'));
 
-// Error Handler Middleware
+
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;

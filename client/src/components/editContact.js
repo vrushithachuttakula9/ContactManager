@@ -24,6 +24,13 @@ const EditContact = ({ updateContactHandler }) => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+    
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
