@@ -9,6 +9,7 @@ const EditContact = ({ updateContactHandler }) => {
   const [name, setName] = useState(contactToEdit.name || "");
   const [email, setEmail] = useState(contactToEdit.email || "");
   const [newImage, setNewImage] = useState(null);
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const EditContact = ({ updateContactHandler }) => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      alert('Please enter a valid email address.');
+      setMessage('Please enter a valid email address.');
       return;
     }
     
@@ -38,11 +39,17 @@ const EditContact = ({ updateContactHandler }) => {
       formData.append('image', newImage);
     }
 
-    await updateContactHandler(formData, contactToEdit._id);
+    try{
+      await updateContactHandler(formData, contactToEdit._id);
 
-    setName("");
-    setEmail("");
-    navigate('/');
+      setName("");
+      setEmail("");
+      navigate('/');
+    } catch(err){
+      console.error('Error in updating the contact:', err);
+      alert('There was an error updating the contact. Please try again.');
+    }
+    
   };
 
   return (
@@ -72,6 +79,7 @@ const EditContact = ({ updateContactHandler }) => {
             required
             className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-teal-400"
           />
+          {message && <p className="mt-2 text-xs text-red-600">{message}</p>}
         </div>
         <div className='mb-2'>
           <label className="text-gray-500 block mb-1 text-sm">Upload New Image</label>

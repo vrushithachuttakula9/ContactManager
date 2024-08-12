@@ -6,6 +6,7 @@ const AddContact = ({ addContactHandler }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [image, setImage] = useState(null);
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const add = async (e) => {
@@ -13,7 +14,7 @@ const AddContact = ({ addContactHandler }) => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      alert('Please enter a valid email address.');
+      setMessage('Please enter a valid email address.');
       return;
     }
     
@@ -22,11 +23,17 @@ const AddContact = ({ addContactHandler }) => {
     formData.append('email', email);
     formData.append('image', image);
 
-    await addContactHandler(formData);
-    setName('');
-    setEmail('');
-    setImage(null);
-    navigate('/');
+    try{
+      await addContactHandler(formData);
+      setName('');
+      setEmail('');
+      setImage(null);
+      navigate('/');
+    } catch(err){
+      console.error('Error adding contact:', err);
+      alert('There was an error adding the contact. Please try again.');
+    }
+    
   };
 
   return (
@@ -56,6 +63,7 @@ const AddContact = ({ addContactHandler }) => {
             required
             className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-teal-400"
           />
+          {message && <p className="mt-2 text-xs text-red-600">{message}</p>}
         </div>
         <div>
           <label className="block mb-1 text-sm">Image</label>
